@@ -1,0 +1,52 @@
+hash: ed99e468133c82ecf8669fee76f110301279632d4096ff0b767f39d4af7ddeb2
+updated: 2017-10-13T15:02:14.850345023+01:00
+imports:
+- name: github.com/casbin/casbin
+  version: 24e651819005cf57777db7f9028b7b79724d0983
+  subpackages:
+  - config
+  - file-adapter
+  - model
+  - persist
+  - rbac
+  - util
+- name: github.com/casbin/xorm-adapter
+  version: 6d28ef80f4e64d865081a63145757101326af8fd
+- name: github.com/gin-contrib/sse
+  version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
+- name: github.com/gin-gonic/gin
+  version: d459835d2b077e44f7c9b453505ee29881d5d12d
+  subpackages:
+  - binding
+  - render
+- name: github.com/go-xorm/builder
+  version: c8871c857d2555fbfbd8524f895be5386d3d8836
+- name: github.com/go-xorm/core
+  version: da1adaf7a28ca792961721a34e6e04945200c890
+- name: github.com/go-xorm/xorm
+  version: 29d4a0330a00b9be468b70e3fb0f74109348c358
+- name: github.com/golang/protobuf
+  version: 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
+  subpackages:
+  - proto
+- name: github.com/Knetic/govaluate
+  version: aa73cfd04eeb71192f11391d4854c2f22e8ac26f
+- name: github.com/lib/pq
+  version: 017e4c14d80628353eaee677a1aeffe47a10c0dc
+  subpackages:
+  - oid
+- name: github.com/mattn/go-isatty
+  version: a5cdd64afdee435007ee3e9f6ed4684af949d568
+- name: github.com/ugorji/go
+  version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
+  subpackages:
+  - codec
+- name: golang.org/x/sys
+  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  subpackages:
+  - unix
+- name: gopkg.in/go-playground/validator.v8
+  version: 5f1438d3fca68893a817e4a66806cea46a9e4ebf
+- name: gopkg.in/yaml.v2
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+testImports: []

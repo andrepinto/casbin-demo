@@ -1,0 +1,10 @@
+package: github.com/andrepinto/casbin-demo
+import:
+- package: github.com/casbin/casbin
+  version: ^1.0.0
+  subpackages:
+  - model
+- package: github.com/casbin/xorm-adapter
+- package: github.com/gin-gonic/gin
+  version: ^1.2.0
+- package: github.com/lib/pq
