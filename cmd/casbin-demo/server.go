@@ -20,55 +20,71 @@ func LoadCasbin() {
 	m.LoadModelFromText(string(modelConfig))
 
 	adapter := xormadapter.NewAdapter("postgres",
-		"user=tlantic password=....! host=... sslmode=disable dbname=authz",
+		" host=mrs-dev.c9zb3qf0ltrn.eu-west-1.rds.amazonaws.com user=tlantic dbname=authorization sslmode=disable password=tlanticdev2!",
 		true)
 
-	enforcer = casbin.NewEnforcer(m, adapter)
+	enforcer = casbin.NewEnforcer("config/rbac_model.conf", adapter)
 
-	enforcer.LoadPolicy()
-
-	for i:=0 ; i<1000; i++{
-		enforcer.AddPolicy( fmt.Sprintf("alice-%d",i), "data1", "read")
-	}
-
-	/*enforcer.AddPolicy( "alice", "data1", "read")
-	enforcer.AddPolicy("data2_admin", "data2", "read")
-	enforcer.AddPolicy("data2_admin", "data2", "write")
+	enforcer.AddPolicy("alice", "data1", "read", "allow")
+	enforcer.AddPolicy("admin", "cockpit", "read", "allow")
+	enforcer.AddPolicy("admin", "cockpit", "write", "allow")
+	enforcer.AddPolicy("admin", "instore", "read", "allow")
+	enforcer.AddPolicy("admin", "instore", "write", "allow")
+	enforcer.AddPolicy("cockpit-user", "cockpit", "write", "allow")
+	enforcer.AddPolicy("cockpit-user", "cockpit", "read", "allow")
 	//enforcer.SavePolicy()
-	enforcer.AddGroupingPolicy("alice", "data2_admin")
+	enforcer.AddGroupingPolicy("alice", "admin")
+	enforcer.AddGroupingPolicy("bob", "cockpit-user")
 	enforcer.SavePolicy()
 
-	fmt.Printf("get policy: %v\n", enforcer.GetPolicy()) */
+	fmt.Printf("get policy: %v\n", enforcer.GetPolicy())
+
+	fmt.Printf("get policy: %v\n", enforcer.GetPolicy())
+
+	enforcer.LoadPolicy()
 }
 
 func main() {
 	LoadCasbin()
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
 
-		sub := "alice" // the user that wants to access a resource.
-		obj := "data2" // the resource that is going to be accessed.
-		act := "read" // the operation that the user performs on the resource.
+	r := gin.Default()
+	r.GET("/validate", func(c *gin.Context) {
+
+		sub, _ := c.GetQuery("sub") // the user that wants to access a resource.
+		obj, _ := c.GetQuery("obj") // the resource that is going to be accessed.
+		act, _ := c.GetQuery("act") // the operation that the user performs on the resource.
+
+		access := false
 
 		if enforcer.Enforce(sub, obj, act) == true {
-			fmt.Println("aa")
+			access = true
 		} else {
-			fmt.Println("bb")
+			access = false
 		}
 
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"message": access,
 		})
 	})
 
-	r.GET("/ping2", func(c *gin.Context) {
+	r.GET("/save", func(c *gin.Context) {
 
-		enforcer.AddPolicy("data2_admin", "data2", "read")
+		enforcer.AddPolicy("data2_admin", "data2", "delete")
 		enforcer.SavePolicy()
 
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"message": "ok",
 		})
 	})
+
+	r.GET("/load", func(c *gin.Context) {
+
+		enforcer.LoadPolicy()
+
+		c.JSON(200, gin.H{
+			"message": "ok",
+		})
+	})
+
 	r.Run(":8080")
 }
